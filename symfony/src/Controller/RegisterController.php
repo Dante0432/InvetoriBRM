@@ -12,6 +12,7 @@ use Symfony\Component\Form\Extension\Core\Type\PasswordType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\Extension\Core\Type\EmailType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Symfony\Component\Validator\Constraints\Length;
 use Symfony\Component\Form\FormError;
@@ -25,16 +26,22 @@ class RegisterController extends AbstractController
     public function register(Request $request,UserPasswordEncoderInterface $passEncoder, UserRepository $UserRepository): Response
     {
         $form = $this->createFormBuilder()
-                ->add('name', TextType::class ,['label' => 'Nombre'])
-                ->add('lastname', TextType::class,['label' => 'Apellido'])
-                ->add('email',EmailType::class, ['label' => 'Correo electrónico'] )
+                ->add('name', TextType::class ,)
+                ->add('lastname', TextType::class)
+                ->add('email',EmailType::class)
                 ->add('password', RepeatedType::class, [
                     'type' => PasswordType::Class,
                     'required' => true,
-                    'first_options' => ['label' => 'Contraseña'],
-                    'second_options' => ['label' => 'Confirmar Contraseña'],
+                    'first_options' => ['label' => 'Password'],
+                    'second_options' => ['label' => 'Confirm pasword'],
                     'invalid_message' => 'Passwords do not match, please try again!!!',
                     'constraints' => new Length(['min' => 6])
+                ])
+                ->add('role', ChoiceType::class, [
+                    'choices' => [
+                        'ADMIN' => 'ROLE_ADMIN',
+                        'CLIENT' => 'ROLE_CLIENT'
+                    ],
                 ])
                 ->add('Completar', SubmitType::class, [
                     'attr' => [
@@ -60,6 +67,7 @@ class RegisterController extends AbstractController
                 $user->setName($data['name']);
                 $user->setLastName($data['lastname']);
                 $user->setEmail($data['email']);
+                $user->setRoles([$data['role']]);
                 $user->setPassword(
                     $passEncoder->encodePassword($user, $data['password'])
                 );

@@ -42,7 +42,7 @@ class ProductController extends AbstractController
         ->add('lot', IntegerType::class )
         ->add('expirationDate', DateType::class, [
             'attr' => [
-                'class' => 'child::float-rigth w-25'
+                'class' => 'list-inline w-25'
             ]
         ])
         ->add('price', NumberType::class )

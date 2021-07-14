@@ -24,7 +24,21 @@
                 <td>{{ product.expirationDate ? product.expirationDate|date('Y-m-d') : '' }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.quantity }}</td>
-                <td><a href="{{ path('sale_new', { 'name': product.name, 'lot': product.lot, 'expirationDate': product.expirationDate, 'price': product.price}) }}">Buy</a></td>
+                <td>
+                    <a 
+                        href="
+                        {{ path('sale_new', { 
+                            'productTypeId': product.id,
+                            'productTypeName': product.name, 
+                            'lot': product.lot, 
+                            'expirationDate': product.expirationDate, 
+                            'price': product.price, 
+                            'quantity': product.quantity
+                        }) }}"
+                    >
+                        Buy
+                    </a>
+                </td>
             </tr>
         {% else %}
             <tr>
