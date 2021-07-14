@@ -41,9 +41,10 @@ class Product
     private $productType;
 
     /**
-     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="product", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
     private $sales;
+    private $quantity;
 
     public function __construct()
     {

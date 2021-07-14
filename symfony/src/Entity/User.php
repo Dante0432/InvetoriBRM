@@ -47,18 +47,12 @@ class User implements UserInterface
     private $lastname;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="seller")
-     */
-    private $products;
-
-    /**
-     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="buyer")
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="buyer", orphanRemoval=true)
      */
     private $sales;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
         $this->sales = new ArrayCollection();
     }
 
@@ -171,42 +165,9 @@ class User implements UserInterface
      * 
      */
      public function __toString(){
-        // para mostrar el nombre de la categoría en la selección
         $fullname="{$this->name} {$this->lastname}";
         return $fullname;
-        // para mostrar el id de la categoría en la selección
-        // return $this->id;
     }
-
-     /**
-      * @return Collection|Product[]
-      */
-     public function getProducts(): Collection
-     {
-         return $this->products;
-     }
-
-     public function addProduct(Product $product): self
-     {
-         if (!$this->products->contains($product)) {
-             $this->products[] = $product;
-             $product->setSeller($this);
-         }
-
-         return $this;
-     }
-
-     public function removeProduct(Product $product): self
-     {
-         if ($this->products->removeElement($product)) {
-             // set the owning side to null (unless already changed)
-             if ($product->getSeller() === $this) {
-                 $product->setSeller(null);
-             }
-         }
-
-         return $this;
-     }
 
      /**
       * @return Collection|Sale[]
@@ -237,4 +198,5 @@ class User implements UserInterface
 
          return $this;
      }
+
 }

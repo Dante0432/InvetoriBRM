@@ -3,12 +3,16 @@
 namespace App\Controller;
 
 use App\Entity\Product;
-use App\Form\ProductType;
+use App\Entity\ProductType;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
+use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
  * @Route("/product")
@@ -30,20 +34,43 @@ class ProductController extends AbstractController
      */
     public function new(Request $request): Response
     {
-        $product = new Product();
-        $form = $this->createForm(ProductType::class, $product);
+        $currentUser=$this->getUser();                    
+        $form = $this->createFormBuilder()
+        ->add('productType', EntityType::class, ['class' => ProductType::class])
+        ->add('quantity', IntegerType::class )
+        ->add('lot', IntegerType::class )
+        ->add('expirationDate', DateType::class )
+        ->add('price', NumberType::class )
+        ->getForm();
+        
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            $data = $form->getData();
+
+            error_log( var_dump( $data['quantity']));
             $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($product);
-            $entityManager->flush();
+            $batchSize = 20;
+            for ($i = 0; $i < $data['quantity']; ++$i) {
+                $product = new Product();
+                $product->setLot(intval($data['lot']));
+                $product->setLot(intval($data['quantity']));
+                $product->setExpirationDate($data['expirationDate']);
+                $product->setPrice($data['price']);
+                $product->setProductType($data['productType']);
+                $entityManager->persist($product);
+                if (($i % $batchSize) === 0) {
+                    $entityManager->flush();
+                    $entityManager->clear();
+                }
+            }
+            $entityManager->clear();
 
             return $this->redirectToRoute('product_index');
         }
 
         return $this->render('product/new.html.twig', [
-            'product' => $product,
+            'product' => new Product(),
             'form' => $form->createView(),
         ]);
     }
