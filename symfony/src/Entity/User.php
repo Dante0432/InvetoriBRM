@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -43,6 +45,22 @@ class User implements UserInterface
      * @ORM\Column(type="string", length=255)
      */
     private $lastname;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="seller")
+     */
+    private $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="buyer")
+     */
+    private $sales;
+
+    public function __construct()
+    {
+        $this->products = new ArrayCollection();
+        $this->sales = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -160,4 +178,63 @@ class User implements UserInterface
         // return $this->id;
     }
 
+     /**
+      * @return Collection|Product[]
+      */
+     public function getProducts(): Collection
+     {
+         return $this->products;
+     }
+
+     public function addProduct(Product $product): self
+     {
+         if (!$this->products->contains($product)) {
+             $this->products[] = $product;
+             $product->setSeller($this);
+         }
+
+         return $this;
+     }
+
+     public function removeProduct(Product $product): self
+     {
+         if ($this->products->removeElement($product)) {
+             // set the owning side to null (unless already changed)
+             if ($product->getSeller() === $this) {
+                 $product->setSeller(null);
+             }
+         }
+
+         return $this;
+     }
+
+     /**
+      * @return Collection|Sale[]
+      */
+     public function getSales(): Collection
+     {
+         return $this->sales;
+     }
+
+     public function addSale(Sale $sale): self
+     {
+         if (!$this->sales->contains($sale)) {
+             $this->sales[] = $sale;
+             $sale->setBuyer($this);
+         }
+
+         return $this;
+     }
+
+     public function removeSale(Sale $sale): self
+     {
+         if ($this->sales->removeElement($sale)) {
+             // set the owning side to null (unless already changed)
+             if ($sale->getBuyer() === $this) {
+                 $sale->setBuyer(null);
+             }
+         }
+
+         return $this;
+     }
 }
