@@ -1,0 +1,26 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Sale{% endblock %}
+
+{% block body %}
+    <h1>Sale</h1>
+
+    <table class="table">
+        <tbody>
+            <tr>
+                <th>Id</th>
+                <td>{{ sale.id }}</td>
+            </tr>
+            <tr>
+                <th>Cancelled</th>
+                <td>{{ sale.cancelled ? 'Yes' : 'No' }}</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <a href="{{ path('sale_index') }}">back to list</a>
+
+    <a href="{{ path('sale_edit', {'id': sale.id}) }}">edit</a>
+
+    {{ include('sale/_delete_form.html.twig') }}
+{% endblock %}

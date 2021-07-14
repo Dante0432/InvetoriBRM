@@ -15,6 +15,7 @@ class ProductType extends AbstractType
             ->add('lot')
             ->add('expiration_date')
             ->add('price')
+            ->add('productType')
         ;
     }
 
