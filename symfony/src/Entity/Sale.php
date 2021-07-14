@@ -24,7 +24,7 @@ class Sale
     private $product;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="sales")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
      */
     private $buyer;
 
@@ -34,7 +34,7 @@ class Sale
     private $cancelled;
 
     /**
-     * @ORM\ManyToOne(targetEntity=user::class, inversedBy="sales")
+     * @ORM\ManyToOne(targetEntity=User::class, inversedBy="sales")
      */
     private $responsibleCancellation;
 
