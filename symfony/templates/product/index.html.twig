@@ -1,31 +1,30 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Product index{% endblock %}
+{% block title %}Inventory{% endblock %}
 
 {% block body %}
-    <h1>Product index</h1>
+    <h1>Inventory</h1>
 
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
+                <th>Product</th>
                 <th>Lot</th>
                 <th>Expiration_date</th>
                 <th>Price</th>
+                <th>Quantity</th>
                 <th>actions</th>
             </tr>
         </thead>
         <tbody>
         {% for product in products %}
             <tr>
-                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
                 <td>{{ product.lot }}</td>
                 <td>{{ product.expirationDate ? product.expirationDate|date('Y-m-d') : '' }}</td>
                 <td>{{ product.price }}</td>
-                <td>
-                    <a href="{{ path('product_show', {'id': product.id}) }}">show</a>
-                    <a href="{{ path('product_edit', {'id': product.id}) }}">edit</a>
-                </td>
+                <td>{{ product.quantity }}</td>
+                <td><a href="{{ path('sale_new', { 'name': product.name, 'lot': product.lot, 'expirationDate': product.expirationDate, 'price': product.price}) }}">Buy</a></td>
             </tr>
         {% else %}
             <tr>
@@ -35,5 +34,5 @@
         </tbody>
     </table>
 
-    <a href="{{ path('product_new') }}">Create new</a>
+    <a class="btn btn-primary float-rigth mt-3" href="{{ path('product_new') }}">Create new</a>
 {% endblock %}

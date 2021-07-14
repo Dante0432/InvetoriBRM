@@ -25,7 +25,7 @@ class ProductType
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="productType", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Product::class, mappedBy="productType", orphanRemoval=true, cascade={"persist"})
      */
     private $products;
 

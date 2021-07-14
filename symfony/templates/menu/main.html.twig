@@ -3,7 +3,7 @@
         set 
             currentPath, menuElements, active, outline =
             path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')),
-            [{ path: "index", label: "Home" } ],
+            [{ path: "product_index", label: "Inventory" }, { path: "sale_index", label: "Sales" }],
             "",
             "outline-"
     %}

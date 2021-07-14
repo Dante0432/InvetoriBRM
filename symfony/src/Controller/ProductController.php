@@ -12,6 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
+use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
 /**
@@ -39,33 +40,33 @@ class ProductController extends AbstractController
         ->add('productType', EntityType::class, ['class' => ProductType::class])
         ->add('quantity', IntegerType::class )
         ->add('lot', IntegerType::class )
-        ->add('expirationDate', DateType::class )
+        ->add('expirationDate', DateType::class, [
+            'attr' => [
+                'class' => 'child::float-rigth w-25'
+            ]
+        ])
         ->add('price', NumberType::class )
+        ->add('Create', SubmitType::class, [
+            'attr' => [
+                'class' => 'btn btn-primary float-rigth mt-3'
+            ]
+        ])
         ->getForm();
         
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-
-            error_log( var_dump( $data['quantity']));
             $entityManager = $this->getDoctrine()->getManager();
-            $batchSize = 20;
             for ($i = 0; $i < $data['quantity']; ++$i) {
                 $product = new Product();
                 $product->setLot(intval($data['lot']));
-                $product->setLot(intval($data['quantity']));
                 $product->setExpirationDate($data['expirationDate']);
                 $product->setPrice($data['price']);
                 $product->setProductType($data['productType']);
                 $entityManager->persist($product);
-                if (($i % $batchSize) === 0) {
-                    $entityManager->flush();
-                    $entityManager->clear();
-                }
             }
-            $entityManager->clear();
-
+            $entityManager->flush();
             return $this->redirectToRoute('product_index');
         }
 
