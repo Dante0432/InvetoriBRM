@@ -37,7 +37,7 @@
                         Edit 
                     </a>
                 {% endif %}
-                {% if (not(admin)) and (product.quantity > 0)%}
+                {% if (not(admin)) and (product.available > 0)%}
                     <a href="{{ path('sale_new', { 'productId': product.id }) }}">
                         Buy
                     </a>
