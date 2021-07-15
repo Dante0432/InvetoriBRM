@@ -44,6 +44,10 @@ class Product
      * @ORM\OneToMany(targetEntity=Sale::class, mappedBy="product", orphanRemoval=true, cascade={"persist"})
      */
     private $sales;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
     private $quantity;
 
     public function __construct()
@@ -134,6 +138,18 @@ class Product
         return $this;
     }
     public function __toString(){
-        return 'algo';
+        return strval($this->id);
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
+
+        return $this;
     }
 }

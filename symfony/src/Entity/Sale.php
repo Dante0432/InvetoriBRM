@@ -38,6 +38,11 @@ class Sale
      */
     private $responsibleCancellation;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $quantity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -87,6 +92,18 @@ class Sale
     public function setResponsibleCancellation(?user $responsibleCancellation): self
     {
         $this->responsibleCancellation = $responsibleCancellation;
+
+        return $this;
+    }
+
+    public function getQuantity(): ?int
+    {
+        return $this->quantity;
+    }
+
+    public function setQuantity(int $quantity): self
+    {
+        $this->quantity = $quantity;
 
         return $this;
     }

@@ -9,6 +9,7 @@
         <thead>
             <tr>
                 <th>Id</th>
+                <th>Quantity</th>
                 <th>Cancelled</th>
                 <th>actions</th>
             </tr>
@@ -17,10 +18,10 @@
         {% for sale in sales %}
             <tr>
                 <td>{{ sale.id }}</td>
+                <td>{{ sale.quantity }}</td>
                 <td>{{ sale.cancelled ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('sale_show', {'id': sale.id}) }}">show</a>
-                    <a href="{{ path('sale_edit', {'id': sale.id}) }}">edit</a>
+                    <a href="{{ path('sale_cancelle', {'id': sale.id}) }}">{{ sale.cancelled ? 'Undo' : 'Cancel' }}</a>
                 </td>
             </tr>
         {% else %}

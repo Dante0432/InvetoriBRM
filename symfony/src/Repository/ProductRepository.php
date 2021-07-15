@@ -26,25 +26,21 @@ class ProductRepository extends ServiceEntityRepository
     public function findAll()
     {
         return $this->createQueryBuilder('product')
-            ->select('productType.id,productType.name,product.lot,product.price,product.expiration_date as expirationDate, count(1) as quantity')
+            ->select('
+                product.id,
+                productType.id as productTypeId,
+                productType.name,
+                product.lot,
+                product.price,
+                product.expiration_date as expirationDate, 
+                (product.quantity - COALESCE(SUM(sales.quantity),0)) as quantity
+                ')
             ->leftJoin('product.productType','productType')
-            ->groupBy('product.lot,expirationDate,product.price, productType.name,productType.id')
-            ->setMaxResults(10)
+            ->leftJoin('product.sales','sales')
+            ->where('sales.cancelled <> true')
+            ->groupBy('product.id,productType.id, productType.name,product.lot,product.price,product.expiration_date,product.quantity')
             ->getQuery()
             ->getResult()
         ;
     }
-    
-
-    /*
-    public function findOneBySomeField($value): ?Product
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }
