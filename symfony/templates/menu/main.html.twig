@@ -1,0 +1,38 @@
+{% block menu %}        
+    {% 
+        set 
+            currentPath, menuElements, active, outline =
+            path(app.request.attributes.get('_route'), app.request.attributes.get('_route_params')),
+            [{ path: "product_index", label: "Inventory", role:"ROLE_CLIENT" }, { path: "sale_index", label: "Sales", role:"ROLE_ADMIN" }],
+            "",
+            "outline-"
+    %}
+     
+    <div class="container mt-3">
+        <ul class="nav nav-pills justify-content-center">
+            {% for menuElement in menuElements %}
+                {% set active="" %}
+                {% if currentPath == path(menuElement.path) %}
+                    {% set active = "rounded-0 border-2 border-primary border-bottom" %}
+                {% endif %}
+                {% if (app.user) and (menuElement.role in app.user.getroles()) %}
+                <li class="nav-item">   
+                    <a class="nav-link {{ active }}" href="{{ path(menuElement.path) }}">{{menuElement.label}}</a>
+                </li>
+                {% endif %}
+                {% if (currentPath == path('app_login')) or (currentPath == path('register')) %}
+                    {% set outline="" %}
+                {% endif %}
+            {% endfor %}
+
+            <li class="nav-item">
+                {% if app.user %}
+                    <a class="btn btn-{{outline}}secondary" href="{{ path('app_logout') }}">Cerrar sesión</a>
+                {% else %}
+                    <a class="btn btn-{{outline}}success" href="{{ path('app_login') }}">Ingresar</a>
+                {% endif %}
+                
+            </li>
+        </ul>
+    </div>
+{% endblock %} 

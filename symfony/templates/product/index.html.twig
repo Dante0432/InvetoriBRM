@@ -1,0 +1,53 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Inventory{% endblock %}
+
+{% block body %}
+{% set admin = (app.user) and ('ROLE_ADMIN' in app.user.getroles()) %}
+    <h1>Inventory</h1>
+
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Product</th>
+                <th>Lot</th>
+                <th>Expiration date</th>
+                <th>Price</th>
+                <th>Quantity</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for product in products %}
+            <tr>
+                <td>{{ product.id }}</td>
+                <td>{{ product.name }}</td>
+                <td>{{ product.lot }}</td>
+                <td>{{ product.expirationDate ? product.expirationDate|date('Y-m-d') : '' }}</td>
+                <td>{{ product.price }}</td>
+                <td>{{ product.quantity }}</td>
+                <td>
+                {% if admin %}
+                    <a href="{{ path('product_edit', { 'id': product.id }) }}">
+                        Edit 
+                    </a>
+                {% endif %}
+                {% if (not(admin)) and (product.quantity > 0)%}
+                    <a href="{{ path('sale_new', { 'productId': product.id }) }}">
+                        Buy
+                    </a>
+                {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="5">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    {% if admin %}
+        <a class="btn btn-primary float-rigth mt-3" href="{{ path('product_new') }}">Create new</a>
+    {% endif %}
+{% endblock %}
