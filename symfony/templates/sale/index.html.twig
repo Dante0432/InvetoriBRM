@@ -21,7 +21,7 @@
                 <td>{{ sale.quantity }}</td>
                 <td>{{ sale.cancelled ? 'Yes' : 'No' }}</td>
                 <td>
-                    <a href="{{ path('sale_cancelle', {'id': sale.id}) }}">{{ sale.cancelled ? 'Undo' : 'Cancel' }}</a>
+                    <a href="{{ path('sale_cancelle', {'id': sale.id}) }}">{{ sale.cancelled ? 'Undo' : 'Cancel sale' }}</a>
                     <a href="{{ path('sale_invoice', {'id': sale.id}) }}">Invoice</a>
                 </td>
             </tr>

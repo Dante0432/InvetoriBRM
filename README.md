@@ -33,9 +33,14 @@ $ docker-compose exec php bash
 $ bin/console doctrine:migrations:migrate
 ```
 
-### Todos
+### In the app
 
- - Write Tests
+ - Register in the login section as an administrator. 
+ - Create or edit products.
+ - Cancel sale.
+ - Invoice pdf generate
+ - Register in the login section as a client. 
+ - Buy products products.
 
 **Free Software, Hell Yeah!**
 
