@@ -5,6 +5,6 @@
 {% block body %}
     <h1>Edit Product</h1>
 
-    {{ include('product/_form.html.twig') }}
+    {{ include('product/_form.html.twig', {'button_label': 'Update'}) }}
 
 {% endblock %}

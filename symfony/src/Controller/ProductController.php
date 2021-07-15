@@ -92,6 +92,7 @@ class ProductController extends AbstractController
     public function edit(Request $request, Product $product): Response
     {
         $form = $this->createForm(ProductTypeForm::class, $product);
+        $form->add('quantity', IntegerType::class, array('disabled' => true));
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
