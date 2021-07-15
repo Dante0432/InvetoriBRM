@@ -27,9 +27,9 @@
 
             <li class="nav-item">
                 {% if app.user %}
-                    <a class="btn btn-{{outline}}secondary" href="{{ path('app_logout') }}">Cerrar sesión</a>
+                    <a class="btn btn-{{outline}}secondary" href="{{ path('app_logout') }}">Logout</a>
                 {% else %}
-                    <a class="btn btn-{{outline}}success" href="{{ path('app_login') }}">Ingresar</a>
+                    <a class="btn btn-{{outline}}success" href="{{ path('app_login') }}">Login</a>
                 {% endif %}
                 
             </li>

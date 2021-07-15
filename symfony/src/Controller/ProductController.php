@@ -58,13 +58,15 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            $entityManager = $this->getDoctrine()->getManager();
+            //error_log(var_dump($data['lot']));die;
+            
             $product = new Product();
             $product->setQuantity($data['quantity']);
             $product->setLot(intval($data['lot']));
             $product->setExpirationDate($data['expirationDate']);
             $product->setPrice($data['price']);
             $product->setProductType($data['productType']);
+            $entityManager = $this->getDoctrine()->getManager();
             $entityManager->persist($product);
             $entityManager->flush();
             return $this->redirectToRoute('product_index');
