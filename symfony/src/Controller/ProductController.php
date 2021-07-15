@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Product;
 use App\Entity\ProductType;
+use App\Form\ProductType as ProductTypeForm;
 use App\Repository\ProductRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -58,14 +59,13 @@ class ProductController extends AbstractController
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
             $entityManager = $this->getDoctrine()->getManager();
-            for ($i = 0; $i < $data['quantity']; ++$i) {
-                $product = new Product();
-                $product->setLot(intval($data['lot']));
-                $product->setExpirationDate($data['expirationDate']);
-                $product->setPrice($data['price']);
-                $product->setProductType($data['productType']);
-                $entityManager->persist($product);
-            }
+            $product = new Product();
+            $product->setQuantity($data['quantity']);
+            $product->setLot(intval($data['lot']));
+            $product->setExpirationDate($data['expirationDate']);
+            $product->setPrice($data['price']);
+            $product->setProductType($data['productType']);
+            $entityManager->persist($product);
             $entityManager->flush();
             return $this->redirectToRoute('product_index');
         }
@@ -91,7 +91,7 @@ class ProductController extends AbstractController
      */
     public function edit(Request $request, Product $product): Response
     {
-        $form = $this->createForm(ProductType::class, $product);
+        $form = $this->createForm(ProductTypeForm::class, $product);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {

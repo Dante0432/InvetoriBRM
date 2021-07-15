@@ -26,10 +26,18 @@ class ProductRepository extends ServiceEntityRepository
     public function findAll()
     {
         return $this->createQueryBuilder('product')
-            ->select('productType.id,productType.name,product.lot,product.price,product.expiration_date as expirationDate, count(1) as quantity')
+            ->select('
+                product.id,
+                productType.id as productTypeId,
+                productType.name,
+                product.lot,
+                product.price,
+                product.expiration_date as expirationDate, 
+                (product.quantity - COALESCE(SUM(sales.quantity),0)) as quantity
+                ')
             ->leftJoin('product.productType','productType')
-            ->groupBy('product.lot,expirationDate,product.price, productType.name,productType.id')
-            ->setMaxResults(10)
+            ->leftJoin('product.sales','sales')
+            ->groupBy('product.id,productType.id, productType.name,product.lot,product.price,product.expiration_date,product.quantity')
             ->getQuery()
             ->getResult()
         ;
@@ -37,13 +45,21 @@ class ProductRepository extends ServiceEntityRepository
     
 
     /*
-    public function findOneBySomeField($value): ?Product
+    public function findOneAvailableProduct($expirationDate,$lot,$price,$productTypeId)
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
+        return $this->createQueryBuilder('product')
+            ->leftJoin('product.productType','productType')
+            ->leftJoin('product.sales','sales')
+            ->where('sales.id is NULL')
+            ->andWhere('product.price = :price')
+            ->andWhere('product.lot = :lot')
+            ->andWhere('product.productType = :productType')
+            ->setParameter('lot', $lot)
+            ->setParameter('price', $price)
+            ->setParameter('productType', $productTypeId)
+            ->setMaxResults(1)
             ->getQuery()
-            ->getOneOrNullResult()
+            ->getResult()
         ;
     }
     */

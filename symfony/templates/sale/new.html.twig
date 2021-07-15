@@ -1,18 +1,25 @@
 {% extends 'base.html.twig' %}
+
         {% block javascripts %}
+         {% set product2 = product.lot %}
             <script
                 src="https://code.jquery.com/jquery-3.6.0.slim.min.js"
                 integrity="sha256-u7e5khyithlIdTpu22PHhENmPcRdFiHRjhAuHcs05RI="
                 crossorigin="anonymous">
             </script>
             <script>
-            { $(document).ready(function() { 
+            { 
+                
+                $(document).ready(function() { 
+                var quantity = {{ product.quantity }};
+                var price = {{ product.price }};
                 $('#form_quantity').keyup(
                     () => {
                         $('#total').empty().append(
-                            parseInt($('#price').text())*parseInt($('#form_quantity').val())
+                            price*parseInt($('#form_quantity').val()) || 0
                         )
-                        if($('#form_quantity').val() > parseInt($('#quantity').text())){
+                        console.log(quantity)
+                        if($('#form_quantity').val() > quantity){
                             if(!$('#form_quantity').hasClass('is-invalid')) {
                                 $('#form_Create').prop( "disabled", true );
                                 $('#form_quantity').addClass('is-invalid')
@@ -32,15 +39,14 @@
         {% endblock %}
 
 {% block title %}Buy{% endblock %}
-{% set roles =  app.user.getroles() %}
 
-{% block body %}{{ dump(roles) }}
+{% block body %}
     <h1>Buy </h1>
-    <h4>Product: {{ app.request.get('productTypeName') }}</h4>
-    <h4>Lot: {{ app.request.get('lot') }}</h4>
-    <h4>Available quantity: <span id="quantity">{{ app.request.get('quantity') }}<span></h4>
-    <h4>Unit Price : <span id="price">{{ app.request.get('price') }}<span></h4>
-    <h4>Total Price : <span id="total">{{ form|json_encode() }}<span></h4>
+    <h4>Product: {{ product.productType.name }}</h4>
+    <h4>Lot: {{ product.lot }}</h4>
+    <h4>Available quantity: {{ product.quantity }}<span></h4>
+    <h4>Unit Price : {{ product.price }}<span></h4>
+    <h4>Total Price : <span id="total">0<span></h4>
     {{ include('sale/_form.html.twig') }}
 
 

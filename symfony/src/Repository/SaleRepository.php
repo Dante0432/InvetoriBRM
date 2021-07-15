@@ -47,4 +47,50 @@ class SaleRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public function findAllproducts()
+    {
+        return $this->createQueryBuilder('sale')
+            ->select('productType.id,
+                productType.name,
+                product.lot,
+                product.price,
+                product.expiration_date as expirationDate, 
+                SUM(CASE WHEN product.id is NOT NULL THEN 1 ELSE 0 END) as quantity')
+            
+            ->leftJoin('sale.product','product')
+            ->leftJoin('product.productType','productType')
+            //->where('sale.id is NULL')
+            ->groupBy('product.lot,expirationDate,product.price, productType.name,productType.id')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
+    public function findOneAvailableProduct($expirationDate,$lot,$price,$productTypeId)
+    {
+        //error_log(var_dump($lot));die;
+        return $this->createQueryBuilder('sale')
+        ->select('productType.id,
+            productType.name,
+            product.lot,
+            product.price,
+            product.expiration_date as expirationDate')
+        
+        ->leftJoin('sale.product','product')
+        ->leftJoin('product.productType','productType')
+        ->where('product.price = :price')
+        ->andWhere('product.lot = :lot')
+        ->andWhere('product.productType = :productType')
+        ->andWhere('sale.id is NULL')
+        //->setParameter('expirationDate', $expirationDate[0])
+        ->setParameter('lot', $lot)
+        ->setParameter('price', $price)
+        ->setParameter('productType', $productTypeId)
+        ->setMaxResults(1)
+        //->groupBy('product.lot,expirationDate,product.price, productType.name,productType.id')
+        ->getQuery()
+        ->getSingleResult()
+        ;
+    }
 }

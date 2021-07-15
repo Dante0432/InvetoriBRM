@@ -29,9 +29,23 @@ class SaleController extends AbstractController
     }
 
     /**
-     * @Route("/new", name="sale_new", methods={"GET","POST"})
+     * @Route("/{id}/toggleCancelle", name="sale_cancelle", methods={"GET","POST"})
      */
-    public function new(Request $request,ProductRepository $productRepository): Response
+     public function toggleCancelle(SaleRepository $saleRepository, $id): Response
+     {
+        $sale = $saleRepository->findOneBy(['id' => $id]);
+        $sale->setCancelled(!$sale->getCancelled());
+        $entityManager = $this->getDoctrine()->getManager();
+        $entityManager->persist($sale);
+        $entityManager->flush();
+        return $this->redirectToRoute('sale_index');
+
+     }
+
+    /**
+     * @Route("/new/{productId}", name="sale_new", methods={"GET","POST"})
+     */
+    public function new(Request $request,ProductRepository $productRepository,$productId): Response
     {
         $currentUser=$this->getUser();
         $form = $this->createFormBuilder()
@@ -43,39 +57,26 @@ class SaleController extends AbstractController
         ])
         ->getForm();
 
-    
-
+        $product = $productRepository->findOneBy(['id' => $productId]);
         $form->handleRequest($request);
         
 
         if ($form->isSubmitted() && $form->isValid()) {
 
             $data = $form->getData();
-            //error_log(var_dump($data['quantity']));die();
+            $sale = new Sale();
+            $sale->setProduct($product);
+            $sale->setCancelled(false);
+            $sale->setBuyer($currentUser);
+            $sale->setQuantity($data['quantity']);
             $entityManager = $this->getDoctrine()->getManager();
-
-            
-            for ($i = 0; $i < $data['quantity']; ++$i) {
-                $product=$productRepository->findOneBy([
-                    'expiration_date' => $request->query->get('expirationDate'),
-                ]);
-                $sale = new Sale();
-
-                $sale->setProduct($product);
-                $sale->setCancelled(false);
-                $sale->setBuyer($currentUser);
-                $entityManager->persist($sale);
-            }
+            $entityManager->persist($sale);
             $entityManager->flush();
-
-           
-
-
             return $this->redirectToRoute('product_index');
         }
 
         return $this->render('sale/new.html.twig', [
-            'sale' => new Sale(),
+            'product' => $product,
             'form' => $form->createView(),
         ]);
     }

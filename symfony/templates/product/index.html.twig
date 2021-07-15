@@ -8,9 +8,10 @@
     <table class="table">
         <thead>
             <tr>
+                <th>Id</th>
                 <th>Product</th>
                 <th>Lot</th>
-                <th>Expiration_date</th>
+                <th>Expiration date</th>
                 <th>Price</th>
                 <th>Quantity</th>
                 <th>actions</th>
@@ -19,25 +20,23 @@
         <tbody>
         {% for product in products %}
             <tr>
+                <td>{{ product.id }}</td>
                 <td>{{ product.name }}</td>
                 <td>{{ product.lot }}</td>
                 <td>{{ product.expirationDate ? product.expirationDate|date('Y-m-d') : '' }}</td>
                 <td>{{ product.price }}</td>
                 <td>{{ product.quantity }}</td>
                 <td>
-                    <a 
-                        href="
-                        {{ path('sale_new', { 
-                            'productTypeId': product.id,
-                            'productTypeName': product.name, 
-                            'lot': product.lot, 
-                            'expirationDate': product.expirationDate, 
-                            'price': product.price, 
-                            'quantity': product.quantity
-                        }) }}"
-                    >
+                {% if (app.user) and ('ROLE_ADMIN' in app.user.getroles()) %}
+                    <a href="{{ path('product_edit', { 'id': product.id }) }}">
+                        Edit 
+                    </a>
+                {% endif %}
+                {% if product.quantity > 0 %}
+                    <a href="{{ path('sale_new', { 'productId': product.id }) }}">
                         Buy
                     </a>
+                {% endif %}
                 </td>
             </tr>
         {% else %}
