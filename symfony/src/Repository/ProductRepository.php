@@ -33,11 +33,17 @@ class ProductRepository extends ServiceEntityRepository
                 product.lot,
                 product.price,
                 product.expiration_date as expirationDate, 
-                (product.quantity - COALESCE(SUM(sales.quantity),0)) as quantity
+                COALESCE(SUM(sales.quantity),0) as sold,
+                (product.quantity) as total,
+                (product.quantity - COALESCE(SUM(
+                    CASE WHEN sales.cancelled = false THEN     
+                    sales.quantity ELSE 0
+                    END
+                ),0)) as available
                 ')
             ->leftJoin('product.productType','productType')
             ->leftJoin('product.sales','sales')
-            ->where('sales.cancelled <> true')
+            
             ->groupBy('product.id,productType.id, productType.name,product.lot,product.price,product.expiration_date,product.quantity')
             ->getQuery()
             ->getResult()

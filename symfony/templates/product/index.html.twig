@@ -14,7 +14,9 @@
                 <th>Lot</th>
                 <th>Expiration date</th>
                 <th>Price</th>
-                <th>Quantity</th>
+                <th>Sold</th>
+                <th>Sold</th>
+                <th>Available</th>
                 <th>actions</th>
             </tr>
         </thead>
@@ -26,7 +28,9 @@
                 <td>{{ product.lot }}</td>
                 <td>{{ product.expirationDate ? product.expirationDate|date('Y-m-d') : '' }}</td>
                 <td>{{ product.price }}</td>
-                <td>{{ product.quantity }}</td>
+                <td>{{ product.total }}</td>
+                <td>{{ product.sold }}</td>
+                <td>{{ product.available }}</td>
                 <td>
                 {% if admin %}
                     <a href="{{ path('product_edit', { 'id': product.id }) }}">
