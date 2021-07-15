@@ -58,8 +58,7 @@ class ProductController extends AbstractController
 
         if ($form->isSubmitted() && $form->isValid()) {
             $data = $form->getData();
-            //error_log(var_dump($data['lot']));die;
-            
+         
             $product = new Product();
             $product->setQuantity($data['quantity']);
             $product->setLot(intval($data['lot']));
@@ -83,8 +82,10 @@ class ProductController extends AbstractController
      */
     public function show(Product $product): Response
     {
+
         return $this->render('product/show.html.twig', [
             'product' => $product,
+            'sales' => $sales
         ]);
     }
 

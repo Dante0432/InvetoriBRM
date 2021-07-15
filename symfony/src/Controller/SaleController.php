@@ -80,7 +80,7 @@ class SaleController extends AbstractController
     /**
      * @Route("/new/{productId}", name="sale_new", methods={"GET","POST"})
      */
-    public function new(Request $request,ProductRepository $productRepository,$productId): Response
+    public function new(Request $request,ProductRepository $productRepository,SaleRepository $saleRepository,$productId): Response
     {
         $currentUser=$this->getUser();
         $form = $this->createFormBuilder()
@@ -93,6 +93,16 @@ class SaleController extends AbstractController
         ->getForm();
 
         $product = $productRepository->findOneBy(['id' => $productId]);
+        $oldSales = $saleRepository->findBy([
+            'product' => $product,
+            'cancelled' => false
+        ]);
+        $totalSold = false;
+        foreach ($oldSales as $oldSale) {
+            $totalSold += $oldSale->getQuantity();
+        }
+        $product->setQuantity($product->getQuantity()-$totalSold);
+
         $form->handleRequest($request);
         
 
