@@ -37,30 +37,10 @@ class ProductRepository extends ServiceEntityRepository
                 ')
             ->leftJoin('product.productType','productType')
             ->leftJoin('product.sales','sales')
+            ->where('sales.cancelled <> true')
             ->groupBy('product.id,productType.id, productType.name,product.lot,product.price,product.expiration_date,product.quantity')
             ->getQuery()
             ->getResult()
         ;
     }
-    
-
-    /*
-    public function findOneAvailableProduct($expirationDate,$lot,$price,$productTypeId)
-    {
-        return $this->createQueryBuilder('product')
-            ->leftJoin('product.productType','productType')
-            ->leftJoin('product.sales','sales')
-            ->where('sales.id is NULL')
-            ->andWhere('product.price = :price')
-            ->andWhere('product.lot = :lot')
-            ->andWhere('product.productType = :productType')
-            ->setParameter('lot', $lot)
-            ->setParameter('price', $price)
-            ->setParameter('productType', $productTypeId)
-            ->setMaxResults(1)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
 }
