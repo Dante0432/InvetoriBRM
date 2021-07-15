@@ -23,10 +23,15 @@ Install the dependencies and devDependencies and start the server.
 $ git clone git@github.com:Dante0432/InvetoryBRM.git
 $ cd InvetoryBRM
 $ docker-compose up -d
+# This will take a few minutes until the database filesystem has been generated. 
 ```
-
-### [Localhost](http://localhost/) 
-http://localhost/ is ready to start!!!
+* After verifying that the application is running on [Localhost](http://localhost/) 
+```sh
+# enter the php bash to access the symfony client
+$ docker-compose exec php bash
+# In the php bash execute for type autogenerate:
+$ bin/console doctrine:migrations:migrate
+```
 
 ### Todos
 
