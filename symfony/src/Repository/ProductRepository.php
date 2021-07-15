@@ -33,7 +33,7 @@ class ProductRepository extends ServiceEntityRepository
                 product.lot,
                 product.price,
                 product.expiration_date as expirationDate, 
-                COALESCE(SUM(sales.quantity),0) as sold,
+                COALESCE(SUM(CASE WHEN sales.cancelled = false THEN sales.quantity ELSE 0 END),0) as sold,
                 (product.quantity) as total,
                 (product.quantity - COALESCE(SUM(
                     CASE WHEN sales.cancelled = false THEN     
