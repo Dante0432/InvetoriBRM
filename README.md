@@ -14,8 +14,8 @@ And of course InventoryBRM itself is open source with a [public repository][dill
 ### Installation
 
 Requires:
-[git-cli installation manual](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
-[docker-compose installation manual](https://docs.docker.com/compose/install/)
+ - [git-cli installation manual](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
+ - [docker-compose installation manual](https://docs.docker.com/compose/install/)
 
 Install the dependencies and devDependencies and start the server.
 
