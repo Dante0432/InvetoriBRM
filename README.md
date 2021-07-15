@@ -1,1 +1,41 @@
-# BlogTest
+# InventoryBRM
+[![Build Status](https://travis-ci.org/joemccann/dillinger.svg?branch=master)](https://travis-ci.org/joemccann/dillinger)
+### Tech
+
+InvetoryBRM uses a number of open source projects to work properly:
+* [Symfony] - Php famework
+* [MySql] - Database engine 
+* [Nginx] - Environment
+* [Docker] - Containers
+
+And of course InventoryBRM itself is open source with a [public repository][dill]
+ on GitHub.
+
+### Installation
+
+Requires:
+[git-cli installation manual](https://git-scm.com/book/en/v2/Getting-Started-Installing-Git/)
+[docker-compose installation manual](https://docs.docker.com/compose/install/)
+
+Install the dependencies and devDependencies and start the server.
+
+```sh
+$ git clone git@github.com:Dante0432/InvetoryBRM.git
+$ cd InvetoryBRM
+$ docker-compose up -d
+```
+
+### [Localhost](http://localhost/) 
+http://localhost/ is ready to start!!!
+
+### Todos
+
+ - Write Tests
+
+**Free Software, Hell Yeah!**
+
+   [dill]: <https://github.com/Dante0432/InvetoryBRM>
+   [Nginx]: <https://www.nginx.com/>
+   [Mysql]: <https://www.mysql.com/>
+   [Symfony]: <https://symfony.com/>
+   [Docker]: <https://www.docker.com/>
